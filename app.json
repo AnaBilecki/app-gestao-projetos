@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "gestao-projetos",
+    "slug": "gestao-projetos",
+    "scheme": "gestaoprojetos",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.ana.bilecki.gestaoprojetos"
+    },
+    "plugins": [
+      "expo-sqlite",
+      "expo-router",
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8b5c85f5-c1d5-4fbb-bee8-1880e35ad280"
+      }
+    }
+  }
+}
