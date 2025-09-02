@@ -37,11 +37,13 @@ export function CustomerCard({ data, onDelete, onPress, ...rest }: Props) {
             <View style={styles.infoContainer}>
                 <Text style={styles.name}>{data.name}</Text>
 
-                <View style={styles.row}>
-                    <MaterialIcons name="email" size={18} color="#9B7E66" />
-                    <Text style={styles.infoText}>{data.email}</Text>
-                </View>
-
+                {data.email && (
+                    <View style={styles.row}>
+                        <MaterialIcons name="email" size={18} color="#9B7E66" />
+                        <Text style={styles.infoText}>{data.email}</Text>
+                    </View>
+                )}
+                
                 <View style={styles.row}>
                     <MaterialIcons name="phone" size={18} color="#9B7E66" />
                     <Text style={styles.infoText}>{formatPhone(data.phone)}</Text>

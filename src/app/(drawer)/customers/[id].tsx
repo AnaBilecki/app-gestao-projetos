@@ -80,11 +80,20 @@ export default function EditCustomer() {
     }
 
     function validateFields() {
-        if (!name.trim() || !email.trim() || !phone.trim() || !city.trim() || !state.trim()) {
-            return "Todos os campos são obrigatórios.";
+        if (!name.trim()) {
+            return "O campo nome é obrigatório.";
+        }
+        if (!phone.trim()) {
+            return "O campo telefone é obrigatório.";
+        }
+        if (!city.trim()) {
+            return "O campo cidade é obrigatório.";
+        }
+        if (!state.trim()) {
+            return "O campo estado é obrigatório.";
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
+        if (email.trim() && !emailRegex.test(email)) {
             return "Formato de e-mail inválido.";
         }
         const digits = phone.replace(/\D/g, "");
