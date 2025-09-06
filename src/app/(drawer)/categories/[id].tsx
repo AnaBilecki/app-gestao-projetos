@@ -1,45 +1,35 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import CategorySelect from "src/components/CategorySelect";
 import { Input } from "src/components/Input";
 import { Toast } from "src/components/Toast";
-import { useStepDatabase } from "src/database/useStepDatabase";
-import { CategoryList } from "src/types/Category";
+import { useCategoryDatabase } from "src/database/useCategoryDatabase";
 
-export default function EditStep() {
+export default function EditCategory() {
     const { id } = useLocalSearchParams();
     
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState<CategoryList | undefined>(undefined);
     const [toast, setToast] = useState<{
         message: string;
         type: "success" | "error";
     } | null>(null);
 
-    const stepDatabase = useStepDatabase();
+    const categoryDatabase = useCategoryDatabase();
 
     useEffect(() => {
-        loadStep();
+        loadCategory();
     }, [id]);
 
-    async function loadStep() {
+    async function loadCategory() {
         try {
-            const step = await stepDatabase.searchById(Number(id));
-            if (step) {
-                setName(step.name);
-                setDescription(step.description);
-
-                if (step.categoryId && step.categoryName) {
-                    setSelectedCategory({
-                        id: step.categoryId,
-                        name: step.categoryName
-                    });
-                }
+            const category = await categoryDatabase.searchById(Number(id));
+            if (category) {
+                setName(category.name);
+                setDescription(category.description);
             }
         } catch (error) {
-            setToast({ message: "Erro ao consultar etapa.", type: "error" });
+            setToast({ message: "Erro ao consultar categoria.", type: "error" });
         }
     }
 
@@ -51,22 +41,19 @@ export default function EditStep() {
         }
 
         try {
-            await stepDatabase.update({ id: Number(id), name, description, categoryId: selectedCategory!.id });
-            setToast({ message: "Etapa alterada com sucesso!", type: "success" });
+            await categoryDatabase.update({ id: Number(id), name, description });
+            setToast({ message: "Categoria alterada com sucesso!", type: "success" });
             setTimeout(() => {
-                router.replace("/steps/List");
+                router.replace("/categories/List");
             }, 1500);
         } catch (error) {
-            setToast({ message: "Erro ao alterar etapa.", type: "error" });
+            setToast({ message: "Erro ao alterar categoria.", type: "error" });
         }
     }
 
     function validateFields() {
         if (!name.trim()) {
             return "O campo nome é obrigatório.";
-        }
-        if (!selectedCategory) {
-            return "O campo categoria é obrigatório.";
         }
         return null;
     }
@@ -90,10 +77,6 @@ export default function EditStep() {
                 placeholder="Descrição" 
                 onChangeText={setDescription} 
                 value={description}
-            />
-            <CategorySelect
-                value={selectedCategory}
-                onSelect={(c) => setSelectedCategory(c)}
             />
 
             <TouchableOpacity style={styles.saveButton} onPress={save}>

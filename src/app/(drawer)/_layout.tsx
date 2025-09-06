@@ -53,17 +53,6 @@ export default function DrawerLayout() {
             <Drawer.Screen name="customers/Create" options={{ title: "CADASTRAR CLIENTE", drawerItemStyle: { display: 'none' } }} />
             <Drawer.Screen name="customers/[id]" options={{ title: "EDITAR CLIENTE", drawerItemStyle: { display: 'none' } }} />
             <Drawer.Screen 
-                name="steps/List" 
-                options={{
-                    title: "ETAPAS",
-                    drawerIcon: ({ color, size }) => (
-                        <MaterialIcons name="summarize" size={size} color={color} />
-                    ),
-                }} 
-            />
-            <Drawer.Screen name="steps/Create" options={{ title: "CADASTRAR ETAPA", drawerItemStyle: { display: 'none' } }} />
-            <Drawer.Screen name="steps/[id]" options={{ title: "EDITAR ETAPA", drawerItemStyle: { display: 'none' } }} />
-            <Drawer.Screen 
                 name="projects/List" 
                 options={{
                     title: "PROJETOS",
@@ -84,6 +73,28 @@ export default function DrawerLayout() {
                 }} 
             />
             <Drawer.Screen name="trackings/[id]" options={{ title: "ACOMPANHAMENTO", drawerItemStyle: { display: 'none' } }} />
+            <Drawer.Screen 
+                name="steps/List" 
+                options={{
+                    title: "ETAPAS",
+                    drawerIcon: ({ color, size }) => (
+                        <MaterialIcons name="summarize" size={size} color={color} />
+                    ),
+                }} 
+            />
+            <Drawer.Screen name="steps/Create" options={{ title: "CADASTRAR ETAPA", drawerItemStyle: { display: 'none' } }} />
+            <Drawer.Screen name="steps/[id]" options={{ title: "EDITAR ETAPA", drawerItemStyle: { display: 'none' } }} />
+             <Drawer.Screen 
+                name="categories/List" 
+                options={{
+                    title: "CATEGORIAS",
+                    drawerIcon: ({ color, size }) => (
+                        <MaterialIcons name="class" size={size} color={color} />
+                    ),
+                }} 
+            />
+            <Drawer.Screen name="categories/Create" options={{ title: "CADASTRAR CATEGORIA", drawerItemStyle: { display: 'none' } }} />
+            <Drawer.Screen name="categories/[id]" options={{ title: "EDITAR CATEGORIA", drawerItemStyle: { display: 'none' } }} />
             <Drawer.Screen 
                 name="Export" 
                 options={{

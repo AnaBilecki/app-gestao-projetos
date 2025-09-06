@@ -4,9 +4,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 const items = [
     { label: "Clientes", icon: "person", href: "/customers/List" },
-    { label: "Etapas", icon: "summarize", href: "/steps/List" },
     { label: "Projetos", icon: "folder", href: "/projects/List" },
     { label: "Status", icon: "library-add-check", href: "/trackings/List" },
+    { label: "Etapas", icon: "summarize", href: "/steps/List" },
+    { label: "Categorias", icon: "class", href: "/categories/List" },
     { label: "Configurações", icon: "settings", href: "/Export" },
 ];
 

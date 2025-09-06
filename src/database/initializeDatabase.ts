@@ -11,10 +11,19 @@ export async function initializeDatabase(database: SQLiteDatabase) {
             phone TEXT
         );
 
-        CREATE TABLE IF NOT EXISTS steps (
+        CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             description TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS steps (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            category_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            description TEXT,
+
+            FOREIGN KEY (category_id) REFERENCES categories(id)
         );
 
         CREATE TABLE IF NOT EXISTS projects (
@@ -36,6 +45,15 @@ export async function initializeDatabase(database: SQLiteDatabase) {
             step_order INTEGER,
             FOREIGN KEY (project_id) REFERENCES projects(id),
             FOREIGN KEY (step_id) REFERENCES steps(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS project_categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL,
+            category_id INTEGER NOT NULL,
+            category_order INTEGER,
+            FOREIGN KEY (project_id) REFERENCES projects(id),
+            FOREIGN KEY (category_id) REFERENCES categories(id)
         );
     `);
 }

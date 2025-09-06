@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Toast } from "src/components/Toast";
 import { Input } from "src/components/Input";
 import CustomerSelect from "src/components/CustomerSelect";
-import { Customer, CustomerList } from "src/types/Customer";
+import { CustomerList } from "src/types/Customer";
 import StepSelect from "src/components/StepSelect";
 import { useProjectDatabase } from "src/database/useProjectDatabase";
 import { router } from "expo-router";

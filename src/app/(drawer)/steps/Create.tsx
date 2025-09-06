@@ -1,13 +1,16 @@
 import { router } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import CategorySelect from "src/components/CategorySelect";
 import { Input } from "src/components/Input";
 import { Toast } from "src/components/Toast";
 import { useStepDatabase } from "src/database/useStepDatabase";
+import { CategoryList } from "src/types/Category";
 
 export default function NewStep() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState<CategoryList | undefined>(undefined);
     const [toast, setToast] = useState<{
         message: string;
         type: "success" | "error";
@@ -23,7 +26,7 @@ export default function NewStep() {
         }
 
         try {
-            await stepDatabase.create({ name, description });
+            await stepDatabase.create({ name, description, categoryId: selectedCategory!.id });
             clearData();
             setToast({ message: "Etapa cadastrada com sucesso!", type: "success" });
             setTimeout(() => {
@@ -38,12 +41,16 @@ export default function NewStep() {
         if (!name.trim()) {
             return "O campo nome é obrigatório.";
         }
+        if (!selectedCategory) {
+            return "O campo categoria é obrigatório.";
+        }
         return null;
     }
 
     function clearData() {
         setName("");
         setDescription("");
+        setSelectedCategory(undefined);
     }
 
     return (
@@ -65,6 +72,10 @@ export default function NewStep() {
                 placeholder="Descrição" 
                 onChangeText={setDescription} 
                 value={description}
+            />
+            <CategorySelect
+                value={selectedCategory}
+                onSelect={(c) => setSelectedCategory(c)}
             />
 
             <TouchableOpacity style={styles.saveButton} onPress={save}>

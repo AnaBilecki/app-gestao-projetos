@@ -4,14 +4,13 @@ import { MaterialIcons } from "@expo/vector-icons";
 type Props = PressableProps & {
     data: {
         name: string,
-        description: string,
-        categoryName?: string
+        description: string
     },
     onDelete: () => void,
     onPress: () => void
 };
 
-export function StepCard({ data, onDelete, onPress, ...rest }: Props) {
+export function CategoryCard({ data, onDelete, onPress, ...rest }: Props) {
     return (
         <Pressable
             onPress={onPress}
@@ -24,10 +23,6 @@ export function StepCard({ data, onDelete, onPress, ...rest }: Props) {
 
             <View style={styles.infoContainer}>
                 <Text style={styles.name}>{data.name}</Text>
-                <View style={styles.categoryContainer}>
-                    <MaterialIcons name="class" size={18} color="#9B7E66" />
-                    <Text style={styles.category}>{data.categoryName}</Text>
-                </View>
                 {data.description && (
                     <Text style={styles.description}>{data.description}</Text>
                 )}
@@ -61,17 +56,6 @@ const styles = StyleSheet.create({
         color: "#9b7e66",
         marginBottom: 8,
         fontFamily: "SweetSansProHeavy",
-    },
-    categoryContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginBottom: 4,
-    },
-    category: {
-        marginLeft: 6,
-        fontSize: 14,
-        fontFamily: "SweetSansProHeavy",
-        color: "#9B7E66",
     },
     description: {
         fontSize: 14,

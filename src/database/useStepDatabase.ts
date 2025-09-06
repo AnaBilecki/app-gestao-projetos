@@ -6,13 +6,14 @@ export function useStepDatabase() {
 
     async function create(data: Omit<Step, "id">) {
         const statement = await database.prepareAsync(
-            "INSERT INTO steps (name, description) VALUES ($name, $description)"
+            "INSERT INTO steps (name, description, category_id) VALUES ($name, $description, $categoryId)"
         );
 
         try {
             await statement.executeAsync({
                 $name: data.name,
-                $description: data.description
+                $description: data.description,
+                $categoryId: data.categoryId
             });
         } catch (error) {
             throw error;
@@ -23,14 +24,32 @@ export function useStepDatabase() {
 
     async function searchByName(name: string) {
         try {
-            const query = "SELECT * FROM steps WHERE name LIKE ? ORDER BY name ASC";
+            const query = `
+                SELECT
+                    s.id AS stepId,
+                    s.category_id AS categoryId,
+                    s.name AS stepName,
+                    s.description AS description,
+                    c.name AS categoryName
+                FROM steps s
+                LEFT JOIN categories c ON c.id = s.category_id
+                WHERE s.name LIKE ? ORDER BY s.name ASC
+            `;
             
-            const response = await database.getAllAsync<Step>(
+            const response = await database.getAllAsync<any>(
                 query,
                 `%${name}%`
             );
             
-            return response;
+            const steps: Step[] = response.map((row: any) => ({
+                id: row.stepId,
+                name: row.stepName,
+                description: row.description,
+                categoryId: row.categoryId,
+                categoryName: row.categoryName
+            }));
+
+            return steps;
         } catch (error) {
             throw error;
         }
@@ -38,14 +57,32 @@ export function useStepDatabase() {
 
     async function searchById(id: number) {
         try {
-            const query = "SELECT * FROM steps WHERE id = ?";
+            const query = `
+                SELECT
+                    s.id AS stepId,
+                    s.category_id AS categoryId,
+                    s.name AS stepName,
+                    s.description AS description,
+                    c.name AS categoryName
+                FROM steps s
+                LEFT JOIN categories c ON c.id = s.category_id
+                WHERE s.id = ?
+            `;
     
-            const response = await database.getFirstAsync<Step>(
+            const response = await database.getAllAsync<any>(
                 query,
                 id
             );
+
+            const step: Step = {
+                id: response[0].stepId,
+                name: response[0].stepName,
+                description: response[0].description,
+                categoryId: response[0].categoryId,
+                categoryName: response[0].categoryName
+            };
     
-            return response;
+            return step;
         } catch (error) {
             throw error;
         }
@@ -53,14 +90,15 @@ export function useStepDatabase() {
 
     async function update(data: Step) {
         const statement = await database.prepareAsync(
-            "UPDATE steps SET name = $name, description = $description WHERE id = $id"
+            "UPDATE steps SET name = $name, description = $description, category_id = $categoryId WHERE id = $id"
         );
     
         try {
             await statement.executeAsync({
                 $id: data.id,
                 $name: data.name,
-                $description: data.description
+                $description: data.description,
+                $categoryId: data.categoryId
             });
         } catch (error) {
             throw error;
