@@ -1,6 +1,6 @@
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, SectionList, StyleSheet, Text, View } from "react-native";
 import { useStepDatabase } from "src/database/useStepDatabase";
 
 type Step = {
@@ -15,15 +15,28 @@ type Props = {
 }
 
 export default function StepSelect({ selectedStepIds, onChange }: Props) {
-    const [steps, setSteps] = useState<Step[]>([]);
+    const [sections, setSections] = useState<{ title: string; data: Step[] }[]>([]);
 
     const stepDatabase = useStepDatabase();
     
     useFocusEffect(
         useCallback(() => {
-                const loadSteps = async () => {
+            const loadSteps = async () => {
                 const allSteps = await stepDatabase.searchByName("");
-                setSteps(allSteps);
+
+                const grouped: Record<string, Step[]> = {};
+                for (const step of allSteps) {
+                    const category = step.categoryName || "Sem categoria";
+                    if (!grouped[category]) grouped[category] = [];
+                    grouped[category].push(step);
+                }
+
+                const newSections = Object.entries(grouped).map(([title, data]) => ({
+                    title,
+                    data,
+                }));
+
+                setSections(newSections);
             };
 
             loadSteps();
@@ -40,9 +53,9 @@ export default function StepSelect({ selectedStepIds, onChange }: Props) {
     return (
         <View>
             <Text style={styles.label}>Etapas:</Text>
-            <View style={styles.stepListContainer}>
-                <FlatList
-                    data={steps}
+            <View style={{ height: 300 }}>
+                <SectionList
+                    sections={sections}
                     keyExtractor={(item) => String(item.id)}
                     renderItem={({ item }) => (
                     <Pressable style={styles.stepItem} onPress={() => toggleStep(item.id)}>
@@ -52,6 +65,10 @@ export default function StepSelect({ selectedStepIds, onChange }: Props) {
                         <Text style={styles.stepName}>{item.name}</Text>
                     </Pressable>
                     )}
+                    renderSectionHeader={({ section: { title } }) => (
+                        <Text style={styles.sectionHeader}>{title}</Text>
+                    )}
+                    contentContainerStyle={styles.stepListContainer}
                 />
             </View>
         </View>
@@ -60,8 +77,17 @@ export default function StepSelect({ selectedStepIds, onChange }: Props) {
 
 const styles = StyleSheet.create({
     stepListContainer: {
-        maxHeight: 300,
-        marginBottom: 16,
+        paddingBottom: 10,
+    },
+    sectionHeader: {
+        fontSize: 16,
+        fontWeight: "700",
+        color: "#9b7e66",
+        backgroundColor: "#ece9dd",
+        paddingVertical: 6,
+        paddingHorizontal: 4,
+        marginTop: 8,
+        borderRadius: 4,
     },
     label: {
         fontSize: 16,
